@@ -25,6 +25,9 @@ multi-agent development work.
 - `no-bullshit`: practical judgment across plans, products, APIs, code,
   evidence, and execution
 - `api-design`: caller-first public API, SDK, CLI, and MCP contract design
+- `create-ticket`: tickets an engineer or agent can execute without open
+  decisions, hedges, or noise
+- `sound-human`: first-read clarity and natural voice for human-facing prose
 
 ## Install
 

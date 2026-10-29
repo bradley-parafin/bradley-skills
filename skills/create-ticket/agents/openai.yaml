@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Ticket"
+  short_description: "Write tickets with no open decisions or noise"
+  default_prompt: "Use $create-ticket to write tickets an engineer or agent can execute without making decisions I could have made."

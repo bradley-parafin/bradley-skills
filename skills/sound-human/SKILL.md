@@ -120,6 +120,8 @@ For each paragraph, ask:
 - Is a temporary rollout detail presented like a permanent rule?
 - Is anything here only history the reader no longer needs?
 - Is there a code term, flag, or internal name that a non-engineer reader would have to look up?
+- Does any sentence hand the reader a decision the writer could make ("either," "decide which," "consider," "if needed")? Make the call and state it, or cut the sentence.
+- Does any sentence describe a non-issue, something that needs no action? Cut it.
 
 Rewrite until every answer is obvious from the text itself.
 
