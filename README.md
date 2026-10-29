@@ -11,6 +11,7 @@ multi-agent development work.
 - `orchestrate`: parallel multi-agent coordination
 - `engineering-lead`: interruptible portfolio, project, and domain coordination
 - `agent-workspace`: machine-configured durable Notion context for agent teams
+- `grokbot`: Codex-to-Grok Bot messages and handoffs through standing webhooks
 - `agent-organization-directory`: provider-neutral role/reporting directory and bounded local snapshots
 - `material-transition-outbox`: quiet-by-default, restart-safe reporting to exact directory bindings
 - `workspace-coordinator`: live reconciliation across workspace, tasks,

@@ -174,8 +174,14 @@ heartbeats, raw messages, or transcripts in the handoff.
 - Update canonical pages instead of appending contradictory snapshots.
 - Fetch the provider's current formatting specification before using extended
   Notion markdown; do not guess unsupported syntax.
-- Never store secrets, auth material, raw private chats, raw prompts, provider
-  payloads, user messages, emails, IP addresses, or unnecessary personal data.
+- Keep credentials out of workspace notes by default. When Bradley explicitly
+  designates a workspace page as the shared credential source for a specific
+  integration, store and retrieve those credentials there as authorized. Read
+  that source before asking him to supply the same key again. This exception
+  does not authorize copying keys into skill files, repositories, logs, memory,
+  ordinary messages, or other pages, or changing the page's sharing settings.
+- Do not store raw private chats, raw prompts, provider payloads, user messages,
+  emails, IP addresses, or unnecessary personal data.
 - Do not delete, archive, move, or replace a hierarchy without explicit user
   authority.
 

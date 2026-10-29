@@ -42,9 +42,20 @@ When asked to review rather than rewrite:
 - Restructure when the user asks, when the source has no usable organization, or when repetition and poor ordering materially hide the point. Make the smallest structural change that solves the problem.
 - If restructuring is warranted, put the mental model before unfamiliar systems or code terms and move volatile rollout notes below durable behavior.
 - Keep a table, diagram, callout, or section when the user chose it, a template requires it, or it makes the rendered document easier to use. Remove it only when it is decorative or duplicative.
-- Default to an output no longer than the source. Expand only to define a necessary term or add context the user requested. If the draft grows, cut repetition before returning it.
+- Default to an output no longer than the source, but preserve the explanation. Before shortening, identify the distinction the reader must understand and state it explicitly. Cut repetition before cutting why something happens; add a sentence when that connection would otherwise be lost.
 - Preserve status qualifications without preserving shouting, awkward labels, or source phrasing. "Work has not started" carries the same fact as "CONFIRMED NOT STARTED."
 - Do not settle for synonym replacement when sentences are genuinely unclear. Fix the specific sentence, paragraph, or section causing the problem.
+- Rewriting is also cutting. Documents that get updated over time grow by addition. Ask what the reader no longer needs, such as superseded plans, resolved problems, or old evidence, and remove it instead of only rewording it.
+
+## Status pages and living documents
+
+A status page answers "where does this stand now?" Write it as the current state, not as a history of how it got there.
+
+- Replace stale content in place. Do not append "Update (date)" blocks, "What changed since…" sections, or changelogs unless the reader asked for history. Git, PRs, and tickets already keep the history.
+- Keep one "as of" date at the top. Do not date individual paragraphs.
+- Lead with the state in a sentence or two, then what's left, then how to use or reproduce it. Put limits and open questions last.
+- Drop finished work unless a reader needs it to understand the current state. A merged PR that explains how something works can stay as a link. A list of everything that merged should go.
+- When a document has comments anchored to text you are replacing, keep those threads attached to the new text on the same topic instead of deleting them.
 
 ## First-read clarity
 
@@ -52,14 +63,16 @@ When asked to review rather than rewrite:
 - Name who acts, what happens, and where it happens. Prefer "The billing service creates the invoice" to "invoice creation is handled downstream."
 - Replace vague references such as "it," "this," "this path," "the path," "the change," "the system," "any subset," and "anything else" when more than one meaning is possible. Name the concrete actor, path, product, or case.
 - Resolve ambiguity from facts the user or source provides. If the missing actor, state, or behavior is unknown, preserve that uncertainty or ask; do not guess to make the prose sound complete.
+- Explain the connection between the cause and the outcome. Naming the systems and listing cases is not enough if the reader must infer why those cases produce the result. State the relevant relationship, including when two events can happen independently, using only facts established by the source.
 - If a sentence sounds polished but is difficult to restate plainly, rewrite it using concrete actions, facts, or consequences.
 - Put the durable rule first when a section depends on it. Do not make the reader invent scenarios from phrases like "the change" or "anything else" before they learn the rule that actually matters.
 - Separate stages that people commonly collapse. "Requested," "queued," "accepted by the provider," and "delivered" are not all "sent."
 - Put code terms after the plain-language explanation. Define a term once, then use it consistently.
+- In writing meant for people rather than code review, such as status pages, docs for other teams, and summaries, cut jargon instead of explaining it. Keep a code term, flag, or internal name only when the reader needs it to act, such as a command to run or a PR to open. Otherwise describe what the thing does ("Medici's setting that offers spend to existing capital customers", not "the `wallet_eligibility` gate in the `kitchen-migration` preset").
 - Spell out or explain unfamiliar acronyms at first use, including acronyms inside headings, diagrams, and link labels. Do not introduce a one-off shorthand mid-page (for example "NS" for a term the section title already spelled out) when a skimmer would hit that sentence cold.
 - Link code after the claim it supports. Do not make the link carry the explanation.
 - Layer detail. Start with the main flow, then move specialized behavior, rollout notes, code maps, and debugging details into later sections or focused pages.
-- Keep mutable status notes dated and separate from durable system behavior.
+- Keep durable system behavior separate from current status. In a status page, the status is the content; see "Status pages and living documents."
 
 ## Natural voice
 
@@ -70,6 +83,8 @@ When asked to review rather than rewrite:
 - Be candid when the source is candid. Keep useful phrases such as "not ideal" or "we still need to decide" when they reflect real judgment.
 - Repeat the same noun when synonym changes would make the reader translate.
 - Prefer ordinary words such as "use," "build," "send," "check," and "change."
+- Pick the plain framing over the clever one. If a simpler phrase says the same thing, use it: "can be run locally," not "runs against your own local stack." Watch for "your own," "against," and abstract subjects like "the suite runs" or "the system handles."
+- Match the wording of a request to how sure you are. Use a direct ask ("Can we set `DOCKER_HOST` here?") for a clear fix, softer wording ("maybe," "could") for a suggestion, and a plain statement with `nit:` for a nit. Do not reuse one phrasing for every comment in a review; repeated "Could we…" reads as a template.
 - Do not invent anecdotes, emotions, jokes, opinions, or personal experience.
 
 ## Remove AI tells
@@ -86,7 +101,7 @@ Cut or rewrite:
 - perfectly symmetrical lists when the subject does not naturally have that shape;
 - conclusions that say nothing beyond "this improves the experience."
 
-Formatting should help the rendered document. Use a table for a real comparison or mapping. Use a diagram only when it is easier to read than a sentence and renders cleanly in the destination. For process diagrams in narrow document layouts, prefer a vertical flow over a long horizontal line. Stack the main sequence and branch only where outcomes diverge.
+Formatting should help the rendered document. Check how it renders where it will be read. On GitHub, a list placed right after a checkbox list (even with a blank line between) merges into one loose list, which puts gaps between the checkboxes; write the notes under a checklist as a paragraph instead. Use a table for a real comparison or mapping. Use a diagram only when it is easier to read than a sentence and renders cleanly in the destination. For process diagrams in narrow document layouts, prefer a vertical flow over a long horizontal line. Stack the main sequence and branch only where outcomes diverge.
 
 ## Ambiguity pass
 
@@ -97,11 +112,14 @@ For each paragraph, ask:
 - Who is acting?
 - What exactly happens?
 - Where does it happen?
+- Does the text explain why the outcome follows, or does the reader have to supply a missing step? Did shortening remove the distinction the user asked to clarify?
 - Would a new reader to this domain understand every necessary term without prior chat or sibling docs?
 - Does "success," "complete," "current," "sent," "this path," or "the change" name a precise state or case?
 - Does any pronoun or vague noun ("it," "this," "that," "subset," "anything else") have more than one possible referent?
 - Is the durable rule stated before the exceptions and edge cases?
 - Is a temporary rollout detail presented like a permanent rule?
+- Is anything here only history the reader no longer needs?
+- Is there a code term, flag, or internal name that a non-engineer reader would have to look up?
 
 Rewrite until every answer is obvious from the text itself.
 
@@ -142,6 +160,18 @@ After:
 > - **All classic orders.** If the vendor collects consent for every classic order before we see it, we can skip our redirect without a new per-customer signal.
 > - **Prepaid only.** We already detect the prepaid no-redirect path. No new signal needed for that case alone.
 > - **Only some classic orders.** The vendor owns who is in that subset. We need a mark from them so our skip matches their switch.
+
+Before (a status page):
+
+> ## Update Oct 15
+> All 16 synthetics pass after paradev#261 set `wallet_eligibility: true` in the `kitchen-migration` gate preset and paradev#258 switched the runner to a production `next build`.
+> ## What changed since Oct 12
+> - #215, #216, #220 merged…
+
+After:
+
+> Status as of Oct 15.
+> Web's synthetic test suite can be run locally, and it passes: 16 of 17 tests pass and 1 is skipped. It only works with four product PRs applied that aren't merged yet.
 
 ## Respect local conventions
 

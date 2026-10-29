@@ -24,7 +24,8 @@ An environment record or page identifies one execution or routing scope. Keep:
 - a clear label and kind such as local machine, cloud, remote host, worktree,
   or sandbox;
 - provider routing or host scope;
-- privacy-safe adapter or routing information, never credentials;
+- privacy-safe adapter or routing information; link an explicitly authorized
+  credential source rather than duplicating its credentials in environment records;
 - configuration state and last verification when those facts can drift;
 - an explanation of what runs there and which native provider owns live state.
 

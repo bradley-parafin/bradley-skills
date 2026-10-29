@@ -1,6 +1,6 @@
 ---
 name: cursor
-description: Ask or delegate to Cursor CLI Agent — Composer 2.5 for fast advisory/review, Grok 4.5 for long-running coding lanes — read-only advice, plan review, code review, or scoped implementation. Use when the user invokes /cursor, says ask Cursor, check with Cursor, use Composer or Grok, delegate to Cursor, or wants a Cursor CLI lane inside an orchestrated workflow.
+description: Ask or delegate to Cursor CLI Agent. Use Grok 4.6/4.7 for quick or mechanical work with clear instructions, and Opus 5.5 for strong execution and review with a good speed/intelligence balance. Use when the user invokes /cursor, says ask Cursor or delegate to Cursor, or wants a Cursor CLI lane inside an orchestrated workflow.
 ---
 
 # Cursor
@@ -10,11 +10,17 @@ Default to read-only advisory or planning mode. Cursor's answer is useful input,
 not authority; compare it against the repo and current command output before
 acting.
 
-Cursor CLI is strongest when it gets clear instructions, narrow ownership, and
-a concrete validation target. Composer 2.5 Fast is a good first choice for fast
-advisory, review, and well-scoped execution work; Grok 4.5 (jointly trained by
-Cursor and xAI for long-running coding, fast at high quality) is the one to try
-on implementation and review lanes — log how it does (see Model Feedback below).
+Choose the model using Bradley's routing preference:
+
+- **Grok 4.6 or 4.7:** quick work and mechanical execution with clear,
+  self-contained instructions and a concrete validation target.
+- **Opus 5.5:** strong execution, code review, plan critique, and work requiring
+  judgment. Bradley finds it a strong balance of speed and intelligence, not
+  just a last resort for the hardest tasks.
+
+Good instructions alone do not make difficult work mechanical. Use Opus 5.5
+when correctness depends on reasoning through ambiguous or cross-cutting
+behavior; use Grok when the task is straightforward to specify and check.
 
 ## Machine facts that bite (verified on cursor-agent 2026.06.19; headless facts re-verified 2026-07-11 on 2026.07.09-a3815c0)
 
@@ -27,9 +33,9 @@ on implementation and review lanes — log how it does (see Model Feedback below
 - Headless default mode is the full agent — `-p` without `--mode` has write
   and shell access. Always pass `--mode=ask` or `--mode=plan` for read-only
   lanes.
-- Parameterized model overrides use bracket syntax:
-  `--model 'claude-opus-4-8[context=1m,effort=high,fast=false]'` — this is
-  how you set thinking/effort tiers per lane.
+- Parameterized model overrides use bracket syntax. Check current CLI support
+  for the selected model before adding context, effort, or fast-mode options;
+  do not carry an old model's override string into a new model.
 - `-w/--worktree [name]` creates the worktree under
   `~/.cursor/worktrees/<reponame>/<name>` (not inside the repo);
   `--worktree-base <branch>` picks the base ref; `--skip-worktree-setup`
@@ -87,12 +93,17 @@ agent status --format json
 agent models
 ```
 
+Resolve the exact available CLI ID for the model chosen above and set
+`CURSOR_MODEL` to it before running the examples. Review and plan-critique
+examples normally use Opus 5.5; quick or mechanical execution can use Grok
+4.6/4.7. Do not guess CLI IDs from display names or IDE model slugs.
+
 Ask Cursor a read-only question:
 
 ```bash
 agent -p \
   --mode=ask \
-  --model "composer-2.5-fast" \
+  --model "${CURSOR_MODEL:?Select a verified model ID first}" \
   --output-format json \
   --trust \
   "Review this approach. Do not modify files."
@@ -103,7 +114,7 @@ Ask Cursor to critique or improve a plan without editing:
 ```bash
 agent -p \
   --mode=plan \
-  --model "composer-2.5-fast" \
+  --model "${CURSOR_MODEL:?Select a verified model ID first}" \
   --output-format json \
   --trust \
   "Given this implementation plan, identify missing steps and risks. Do not modify files."
@@ -115,8 +126,8 @@ Persist `session_id`; `request_id` is request-scoped telemetry, not continuity.
 ### Structured output caveat
 
 Cursor's `--output-format json` wraps the run; it does **not** schema-constrain
-the model's `result`. Even when prompted for one JSON object, Composer 2.5 Fast
-has been observed to prepend progress prose inside `result` while returning
+the model's `result`. Earlier runs have been observed to prepend progress
+prose inside `result`, even when prompted for one JSON object, while returning
 `is_error: false`. For machine contracts:
 
 1. Ask for exactly one JSON value and no prose/fences.
@@ -147,7 +158,7 @@ Use for:
 Command shape:
 
 ```bash
-agent -p --mode=ask --model "composer-2.5-fast" --output-format json --trust "$PROMPT"
+agent -p --mode=ask --model "${CURSOR_MODEL:?Select a verified model ID first}" --output-format json --trust "$PROMPT"
 ```
 
 ### Read-Only Plan Mode
@@ -156,7 +167,7 @@ Use for plan critique or to turn a ticket into a sharper execution plan. Plan
 mode is read-only and should not edit files.
 
 ```bash
-agent -p --mode=plan --model "composer-2.5-fast" --output-format json --trust "$PROMPT"
+agent -p --mode=plan --model "${CURSOR_MODEL:?Select a verified model ID first}" --output-format json --trust "$PROMPT"
 ```
 
 ### Scoped Execution Mode
@@ -169,7 +180,7 @@ Prefer an isolated worktree for risky or broad implementation:
 
 ```bash
 agent -p \
-  --model "composer-2.5-fast" \
+  --model "${CURSOR_MODEL:?Select a verified model ID first}" \
   --output-format json \
   --trust \
   --worktree "cursor-$(date +%Y%m%d-%H%M)" \
@@ -181,7 +192,7 @@ wants autonomous execution:
 
 ```bash
 agent -p \
-  --model "composer-2.5-fast" \
+  --model "${CURSOR_MODEL:?Select a verified model ID first}" \
   --output-format json \
   --trust \
   --force \
@@ -224,9 +235,11 @@ If you discover a cross-scope issue, report it instead of expanding scope.
 Run the requested validation and report results.
 ```
 
-## Headless lane benchmarks (verified 2026-07-11, composer-2.5-fast)
+## Historical headless CLI checks (2026-07-11)
 
-Measured driving `agent -p` from Claude Code in tmp projects:
+Measured driving `agent -p` from Claude Code in tmp projects with a retired
+model. These are historical CLI observations, not benchmarks of Grok 4.6/4.7
+or Opus 5.5; do not use their timings to choose current models.
 
 - **Execution lifecycle works end-to-end**: a `--force --trust` lane built a
   Bun+TS module with passing tests in 99s wall (39.8s duration_ms, ~27k
@@ -274,18 +287,18 @@ Keep the main agent accountable:
 
 ## Model Notes
 
-Useful model ids (run `agent models` before relying on one in scripts — the
-list changes, and ids below the first two are unverified against the live
-list):
+Run `agent models` before selecting a concrete ID. Display names, CLI IDs,
+and IDE Task model slugs are not interchangeable.
 
-- `composer-2.5-fast` - fast Composer 2.5; speed king for advisory/review.
-- `composer-2.5` - current Composer 2.5.
-- Grok 4.5 - Cursor+xAI joint model, positioned for long-running coding at
-  near-frontier quality with high speed. Strong candidate for implementation
-  and review lanes; deliberately try it on comparable lanes and log results.
-- `auto` - let Cursor pick.
-- Cross-provider models (Claude, GPT, Gemini) are also exposed; bracket
-  overrides set context/effort/fast per lane.
+Prefer the available Grok 4.6/4.7 variant for quick or mechanical tasks, and
+Opus 5.5 for substantive execution and review. Honor an explicit user model
+choice. Do not silently substitute `auto` or another family if the requested
+model is unavailable.
+
+If model discovery fails authentication, report that limitation when a lane
+needs to run. Do not invent an ID or treat cached login status as proof of
+access. A skill-only edit can still record these routing preferences without
+claiming the model IDs or execution were verified.
 
 ## Model Feedback (self-optimizing routing)
 
@@ -293,10 +306,11 @@ Cursor lanes participate in the same routing loop as Codex/Claude lanes: log
 every meaningful lane outcome to
 `~/.agents/skills/orchestrate/model-feedback.jsonl` with
 `agent_surface: "cursor-cli"` and the concrete model id (including bracket
-overrides). Follow the orchestrate skill's exploration policy — when risk
-allows, route one comparable lane to an unproven model (Grok 4.5 is the
-current one to build evidence on) instead of always defaulting to the known
-quantity.
+overrides). Compare outcomes within the same task type. Keep Bradley's routing
+preference as the default; do not turn routine work into a model experiment.
+Use comparable completed lanes to refine the choice between Grok 4.6/4.7 for
+quick or mechanical work and Opus 5.5 for execution and review requiring
+stronger judgment.
 
 ## Sessions
 
