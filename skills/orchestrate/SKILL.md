@@ -627,6 +627,15 @@ carries canon.
 Skim `briefing-feedback.jsonl` (see Briefing Learnings above) for techniques
 matching this lane's task shape and agent surface before writing the prompt.
 
+**Point at shared rules instead of restating them.** The rules every coding
+agent follows live in the Agent Workspace note "Coding validation" (CTX-11) and
+the global CLAUDE.md/AGENTS.md "Shared agent context and process" section; the
+brief points there and carries only what varies: goal, mission lock, owned
+files, other lanes to avoid, the report format, and any deliberate override.
+Hand-writing shared rules into each brief is how parallel lanes drift. When a
+rule should apply to every agent, change CTX-11, not the next brief. Keep
+orchestration vocabulary (lanes, briefs, coordinators) out of repo docs.
+
 Give every subagent a precise prompt. Include:
 
 - Exact coordinator task id and role (`coordinator`, `peer-owner`,
@@ -840,6 +849,19 @@ default as slice-local tests, lead review, and focused rechecks followed by this
 single integrated critique. Run a formal critique for every slice only when the
 user explicitly confirms that repeated cross-provider review is worth the added
 time and reconciliation cost.
+
+**Risk-based merge gate.** A lane's PR that changes lifecycle behavior,
+persisted data, or a shared contract gets an independent adversarial review
+(fresh context, given the diff and the intent, not the author's conclusions)
+before it merges, even when CI and bot review are green. Green CI plus resolved
+threads is enough only for low-risk PRs.
+
+**Findings are signals.** Treat every bot or reviewer finding as evidence that
+something upstream let the bug through: the brief, the shared rules (CTX-11), a missing
+lint rule or type, a test harness gap, or the review lens. For each finding,
+name its class and the guardrail that should have caught it, and add or fix
+that guardrail. The same class showing up in two lanes means CTX-11 is
+missing it; add it there.
 
 Skip the critique gate only when the task is a tiny mechanical edit, no code or
 durable state changed, the user explicitly says to skip it, or an urgent hotfix
