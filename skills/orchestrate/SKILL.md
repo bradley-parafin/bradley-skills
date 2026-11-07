@@ -628,12 +628,12 @@ Skim `briefing-feedback.jsonl` (see Briefing Learnings above) for techniques
 matching this lane's task shape and agent surface before writing the prompt.
 
 **Point at shared rules instead of restating them.** The rules every coding
-agent follows live in the Agent Workspace note "Coding validation" (CTX-11) and
+agent follows live in the Agent Workspace note "Coding validation" and
 the global CLAUDE.md/AGENTS.md "Shared agent context and process" section; the
 brief points there and carries only what varies: goal, mission lock, owned
 files, other lanes to avoid, the report format, and any deliberate override.
 Hand-writing shared rules into each brief is how parallel lanes drift. When a
-rule should apply to every agent, change CTX-11, not the next brief. Keep
+rule should apply to every agent, change that note, not the next brief. Keep
 orchestration vocabulary (lanes, briefs, coordinators) out of repo docs.
 
 Give every subagent a precise prompt. Include:
@@ -857,10 +857,10 @@ before it merges, even when CI and bot review are green. Green CI plus resolved
 threads is enough only for low-risk PRs.
 
 **Findings are signals.** Treat every bot or reviewer finding as evidence that
-something upstream let the bug through: the brief, the shared rules (CTX-11), a missing
+something upstream let the bug through: the brief, the shared rules note, a missing
 lint rule or type, a test harness gap, or the review lens. For each finding,
 name its class and the guardrail that should have caught it, and add or fix
-that guardrail. The same class showing up in two lanes means CTX-11 is
+that guardrail. The same class showing up in two lanes means the shared rules note is
 missing it; add it there.
 
 Skip the critique gate only when the task is a tiny mechanical edit, no code or

@@ -5,7 +5,7 @@ description: Rewrite or review human-facing prose so it reads like a thoughtful 
 
 # Sound Human
 
-Make the writing easy to understand on the first read, in any domain. The subject can be Amazon Lending, email, Paradev, or something else entirely — the bar does not change. A newcomer to that topic should still know who acts, what happens, and what rule to remember without inventing missing context.
+Make the writing easy to understand on the first read, in any domain. The subject can be payments, email, developer tooling, or something else entirely — the bar does not change. A newcomer to that topic should still know who acts, what happens, and what rule to remember without inventing missing context.
 
 Human voice comes from clear judgment, concrete details, and natural rhythm, not fake slang or manufactured personality.
 
@@ -68,7 +68,7 @@ A status page answers "where does this stand now?" Write it as the current state
 - Put the durable rule first when a section depends on it. Do not make the reader invent scenarios from phrases like "the change" or "anything else" before they learn the rule that actually matters.
 - Separate stages that people commonly collapse. "Requested," "queued," "accepted by the provider," and "delivered" are not all "sent."
 - Put code terms after the plain-language explanation. Define a term once, then use it consistently.
-- In writing meant for people rather than code review, such as status pages, docs for other teams, and summaries, cut jargon instead of explaining it. Keep a code term, flag, or internal name only when the reader needs it to act, such as a command to run or a PR to open. Otherwise describe what the thing does ("Medici's setting that offers spend to existing capital customers", not "the `wallet_eligibility` gate in the `kitchen-migration` preset").
+- In writing meant for people rather than code review, such as status pages, docs for other teams, and summaries, cut jargon instead of explaining it. Keep a code term, flag, or internal name only when the reader needs it to act, such as a command to run or a PR to open. Otherwise describe what the thing does ("the setting that shows the new checkout to existing customers", not "the `checkout_v2` flag in the `billing-migration` preset").
 - Spell out or explain unfamiliar acronyms at first use, including acronyms inside headings, diagrams, and link labels. Do not introduce a one-off shorthand mid-page (for example "NS" for a term the section title already spelled out) when a skimmer would hit that sentence cold.
 - Link code after the claim it supports. Do not make the link carry the explanation.
 - Layer detail. Start with the main flow, then move specialized behavior, rollout notes, code maps, and debugging details into later sections or focused pages.
@@ -166,14 +166,14 @@ After:
 Before (a status page):
 
 > ## Update Oct 15
-> All 16 synthetics pass after paradev#261 set `wallet_eligibility: true` in the `kitchen-migration` gate preset and paradev#258 switched the runner to a production `next build`.
+> All 16 e2e specs pass after devtools#261 set `checkout_v2: true` in the `billing-migration` flag preset and devtools#258 switched the runner to a production `next build`.
 > ## What changed since Oct 12
 > - #215, #216, #220 merged…
 
 After:
 
 > Status as of Oct 15.
-> Web's synthetic test suite can be run locally, and it passes: 16 of 17 tests pass and 1 is skipped. It only works with four product PRs applied that aren't merged yet.
+> The web app's end-to-end test suite can be run locally, and it passes: 16 of 17 tests pass and 1 is skipped. It only works with four product PRs applied that aren't merged yet.
 
 ## Respect local conventions
 

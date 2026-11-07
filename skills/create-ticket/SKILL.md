@@ -23,8 +23,8 @@ If the author leaves a decision open, the implementer hands it to an agent, and 
 
 - **Current state:** what exists today and where it runs, with the smallest useful code references (file and function) inline.
 - **The change:** what to build or move, stated as a definite instruction.
-- **Rules the implementer would otherwise break:** only the non-obvious ones, each with its reason. Examples: "keep the event object type and id the same, or the idempotency keys change and people get the email twice", "merge only after Kitchen deploys, because merging airflow-dags deploys immediately".
-- **Done when:** observable results someone can check (a run in Toolbox, a log line, a count).
+- **Rules the implementer would otherwise break:** only the non-obvious ones, each with its reason. Examples: "keep the event object type and id the same, or the idempotency keys change and people get the email twice", "merge only after the API deploys, because merging the scheduler repo deploys immediately".
+- **Done when:** observable results someone can check (a run in the admin dashboard, a log line, a count).
 - **Links:** the ticket or PR that shows the pattern to follow, and real blockers as blocking relations.
 
 ## What stays out
@@ -48,9 +48,9 @@ Apply `/sound-human` to every ticket. In particular:
 - Open with the current behavior and the concrete change, not background.
 - Name who acts and where: the DAG, the job, the selector, the service.
 - Introduce a component by what it does the first time it appears.
-- Say explicitly when a piece already exists, so nobody rebuilds it ("the selectors already look up the offer").
+- Say explicitly when a piece already exists, so nobody rebuilds it ("the selectors already look up the account").
 - Describe behavior instead of vague phrases like "other paths" or "special cases".
-- Title: an imperative outcome under ~70 characters ("Run accept-offer drips through the Kitchen campaign job"), with the team's ticket conventions.
+- Title: an imperative outcome under ~70 characters ("Send trial-reminder emails through the shared campaign job"), with the team's ticket conventions.
 
 ## Final pass
 
@@ -68,10 +68,10 @@ Before:
 
 > The legacy jobs wrap the selector in a one-minute statement timeout. The campaign runner doesn't, so move the timeout into the selector if it's still needed.
 >
-> The selectors pick applications whose step started 24 to 48 hours ago. Either keep a daily schedule, or change the selectors to check what was already sent. A $0 limit is sent today, while LOC drops those, so decide which to keep.
+> The selectors pick accounts whose trial started 24 to 48 hours ago. Either keep a daily schedule, or change the selectors to check what was already sent. Free-plan accounts get the email today, while the old job skipped them, so decide which to keep.
 
 After:
 
 > The legacy jobs wrap the selector in a one-minute statement timeout. The campaign runner doesn't, so set the same timeout inside the selector.
 >
-> The selectors pick applications whose step started 24 to 48 hours ago, which only works because the DAG runs every day. Keep the campaign task on this DAG's daily schedule. Keep today's credit-limit rule: skip only merchants with no limit.
+> The selectors pick accounts whose trial started 24 to 48 hours ago, which only works because the job runs every day. Keep the campaign task on its daily schedule. Keep today's rule: send to free-plan accounts too.
