@@ -71,8 +71,25 @@ A status page answers "where does this stand now?" Write it as the current state
 - In writing meant for people rather than code review, such as status pages, docs for other teams, and summaries, cut jargon instead of explaining it. Keep a code term, flag, or internal name only when the reader needs it to act, such as a command to run or a PR to open. Otherwise describe what the thing does ("the setting that shows the new checkout to existing customers", not "the `checkout_v2` flag in the `billing-migration` preset").
 - Spell out or explain unfamiliar acronyms at first use, including acronyms inside headings, diagrams, and link labels. Do not introduce a one-off shorthand mid-page (for example "NS" for a term the section title already spelled out) when a skimmer would hit that sentence cold.
 - Link code after the claim it supports. Do not make the link carry the explanation.
+- Link every reference the reader might want to open: Sentry issues, Slack threads, tickets, PRs, dashboards. A bare name like "WEB-4F2" or "the #alerts thread" makes the reader go search.
+- In writing for other people, don't link pages they can't open, such as private drafts, personal trackers or local file paths. Name the thing or copy the relevant point in instead.
+- Don't point at things that don't exist yet, like "the next PR" or "a follow-up". Say what the change is, or name its ticket.
+- State only what's verified. Cut unconfirmed claims about what a person or system will do next instead of hedging them. If the open question matters to the reader, say plainly that it's open.
 - Layer detail. Start with the main flow, then move specialized behavior, rollout notes, code maps, and debugging details into later sections or focused pages.
 - Keep durable system behavior separate from current status. In a status page, the status is the content; see "Status pages and living documents."
+
+## Length and order
+
+Readers scan before they read. They look at headings and the first words of each paragraph, then decide whether to read the rest. Write for that. The evidence and sources are in [references/readability-research.md](references/readability-research.md).
+
+- Keep sentences around 15–20 words on average. Rewrite any sentence over 25 words unless a list or a necessary qualifier makes it easy to follow. A sentence over 40 words almost always needs splitting.
+- Give each paragraph one idea. Split a paragraph or list item over about 80 words, or over five sentences. A numbered step that holds a whole paragraph should become a short step plus its own paragraph or sub-bullets.
+- Put the key words first. A heading states the point ("Rate limits apply per account, not per user"), not the topic ("Rate limits"). A paragraph's first sentence says what happens; the code names and exceptions come after.
+- Start a sentence with what the reader already knows, and end it with the new information. Open with the actor or the event ("When the customer pays, the billing service…"), not with an unfamiliar class or endpoint name.
+- Limit code names to what the reader needs. More than two in one sentence means the sentence is doing a lookup table's job: split it, or say what each piece does and drop the names that aren't needed to act.
+- Shorter is not the goal; easy to follow is. Keep the linking words ("because," "so," "until," "then") that tell the reader how two facts connect, even when they make a sentence longer. Splitting a sentence is wrong if the reader then has to guess the connection.
+- Use readability formulas such as Flesch only as a warning light. They count word and sentence length and can't see jargon, order, or missing links. In technical docs, long identifiers swamp the score, so `scripts/readability.py` counts each code name as one short word and reports code names per 100 words as a separate number.
+- Run `scripts/readability.py` on a draft or exported doc to list long sentences, long paragraphs, code-heavy sentences, and paragraphs that open with a code name. It's advisory: fix what makes the text harder to follow, and leave what doesn't.
 
 ## Natural voice
 
@@ -82,6 +99,7 @@ A status page answers "where does this stand now?" Write it as the current state
 - Prefer direct statements over ceremonial transitions and throat-clearing.
 - Be candid when the source is candid. Keep useful phrases such as "not ideal" or "we still need to decide" when they reflect real judgment.
 - Repeat the same noun when synonym changes would make the reader translate.
+- Pick one word for each actor and keep it. Don't drift between near-synonyms like customer, user and account, or order and purchase. When two terms are both needed, define how they relate once (for example, "each customer has one account ID").
 - Prefer ordinary words such as "use," "build," "send," "check," and "change."
 - Pick the plain framing over the clever one. If a simpler phrase says the same thing, use it: "can be run locally," not "runs against your own local stack." Watch for "your own," "against," and abstract subjects like "the suite runs" or "the system handles."
 - Match the wording of a request to how sure you are. Use a direct ask ("Can we set `DOCKER_HOST` here?") for a clear fix, softer wording ("maybe," "could") for a suggestion, and a plain statement with `nit:` for a nit. Do not reuse one phrasing for every comment in a review; repeated "Could we…" reads as a template.
@@ -122,6 +140,8 @@ For each paragraph, ask:
 - Is there a code term, flag, or internal name that a non-engineer reader would have to look up?
 - Does any sentence hand the reader a decision the writer could make ("either," "decide which," "consider," "if needed")? Make the call and state it, or cut the sentence.
 - Does any sentence describe a non-issue, something that needs no action? Cut it.
+- Could a skimmer get the point from the heading and the paragraph's first sentence alone?
+- Does the paragraph open with a code name before saying what happens? Does any sentence run past 25 words or carry more than two code names?
 
 Rewrite until every answer is obvious from the text itself.
 
@@ -174,6 +194,10 @@ After:
 
 > Status as of Oct 15.
 > The web app's end-to-end test suite can be run locally, and it passes: 16 of 17 tests pass and 1 is skipped. It only works with four product PRs applied that aren't merged yet.
+
+## PR titles, descriptions, and tickets
+
+For a PR title, PR description, PR comment, or Linear ticket, also follow [references/pr-and-ticket-checklist.md](references/pr-and-ticket-checklist.md) and run `scripts/prose_check.py` on the draft before publishing.
 
 ## Respect local conventions
 
